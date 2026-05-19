@@ -29,8 +29,9 @@ class FileCache implements CacheInterface
 
         file_put_contents(
             $this->getCacheFilename(),
-            json_encode($cache, JSON_PRETTY_PRINT),
+            json_encode($cache, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
         );
+
     }
 
     /**
