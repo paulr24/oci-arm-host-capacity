@@ -55,6 +55,9 @@ class OciApi
 
         $displayName = 'instance-' . date('Ymd-Hi');
 
+        // Sanitize SSH key - remove any newlines or carriage returns
+        $sshKey = trim(str_replace(["\r", "\n"], '', $sshKey));
+
         $body = <<<EOD
 {
     "metadata": {
