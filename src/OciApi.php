@@ -252,6 +252,10 @@ EOD;
 
         if ($body) {
             $curlOptions[CURLOPT_POSTFIELDS] = $body;
+            // Ensure Content-Type is set for POST/PUT requests with body
+            if (!$this->hasContentTypeHeader($headers)) {
+                $curlOptions[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+            }
         }
 
         return HttpClient::getResponse($curlOptions);
@@ -265,5 +269,15 @@ EOD;
     private function getBaseApiUrl(OciConfig $config, string $api = 'iaas'): string
     {
         return "https://$api.{$config->region}.oraclecloud.com/20160918";
+    }
+
+    private function hasContentTypeHeader(array $headers): bool
+    {
+        foreach ($headers as $header) {
+            if (stripos($header, 'Content-Type:') === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }
